@@ -9,10 +9,13 @@
     "babel/object-curly-spacing": 0,
     "no-restricted-syntax": 0,
     "no-process-env": 0,
+    "no-process-exit": 0,
+    "max-len": 0,
     "newline-before-return": 0,
     "newline-after-var": 0,
     "comma-dangle": 0,
     "computed-property-spacing": 0,
-    "init-declarations": 0
+    "init-declarations": 0,
+    "no-console": 0
   }
 }

@@ -3,17 +3,11 @@
 
 …as in "dock *here*"
 
-It:
-
-1. Creates a `Dockerfile` in current directory
-2. Builds an image from it
-3. Runs and attaches to it, while mounting current-dir as `/<dir-name>`
-
-## Demo
+To quickly create a Docker container and mount current directory inside it.
 
 ```batch
 C:\docker-test> dir /w/b
-somefile
+foo.js bar.css
 C:\docker-test> dockere
 Sending build context to Docker daemon
 Step 1 : FROM ubuntu
@@ -21,13 +15,37 @@ Step 2 : WORKDIR /docker-test
 Step 3 : CMD bash -li
 Successfully built <id>
 root@<id>:/docker-test# ls
-somefile
+foo.js bar.css
 root@<id>:/docker-test# _
 ```
 
-Great for mounting current directory on Windows inside a Docker Ubuntu container.
+## Install
+
+```
+npm i -g dockere
+```
+
+## Usage
+
+```sh
+Usage: dockere [OPTION]
+  -d, --dockerfile    dockerfile template to build from. Default: ubuntu
+  -c, --command       command to execute when run. Default: bash -li
+  -m, --mount-home    whether to mount your home-dir as /root. Defaut: no
+
+Examples:
+  dockere
+  dockere -d nodejs -m
+  dockere -d ubuntu -c echo ok
+```
 
 ## Features
+
+It:
+
+1. Creates a `Dockerfile` in current directory
+2. Builds an image from it
+3. Runs and attaches to it, while mounting current-dir as `/<dir-name>`
 
 ### Dockerfiles
 
@@ -79,20 +97,8 @@ You can mount your home-dir as `/root`
 ```sh
 $ dockere -m
 ...
-Successfully built <id>
-ok
-```
-
-## Usage
-
-```sh
-Usage: dockere [OPTION]
-  -d, --dockerfile    dockerfile template to build from. Default: ubuntu
-  -c, --command       command to execute when run. Default: bash -li
-  -m, --mount-home    whether to mount your home-dir as /root. Defaut: no
-
-Examples:
-  dockere
-  dockere -d nodejs -m
-  dockere -d ubuntu -c echo ok
+09:02 @MyBashPrompt /docker-test
+$ cd ~/.ssh
+09:02 @MyBashPrompt /root/.ssh
+$ _
 ```
