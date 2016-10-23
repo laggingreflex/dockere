@@ -2,7 +2,8 @@ import os from 'os';
 import path from 'path';
 import fs from 'fs-extra';
 
-export const homeConfigDir = path.join( os.homedir(), '.dockere' );
+export const homedir = os.homedir();
+export const homeConfigDir = path.join( homedir, '.dockere' );
 export const moduleDir = path.join( path.dirname( __filename ), '../../dockerfiles' );
 export const cwdFull = process.cwd();
 export const cwdBase = path.basename( cwdFull );
