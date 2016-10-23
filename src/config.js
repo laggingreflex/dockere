@@ -1,5 +1,6 @@
 import yargs from 'yargs';
 import { dockerfiles } from './utils/fs';
+import { printUsage } from './utils/help';
 
 const { argv: config } = yargs.options( {
   command: {
@@ -11,10 +12,19 @@ const { argv: config } = yargs.options( {
     type: 'string'
   },
   mountHome: {
-    alias: [ 'h' ],
+    alias: [ 'm' ],
+    type: 'boolean'
+  },
+  help: {
+    alias: [ 'h', '?' ],
     type: 'boolean'
   }
 } );
+
+
+if (config.help) {
+  printUsage(true);
+}
 
 if ( !dockerfiles.cwd && !config.dockerfile && config._.length === 1 ) {
   config.dockerfile = config._[ 0 ];
