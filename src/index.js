@@ -9,12 +9,6 @@ import { build, run } from './utils/docker';
 import { confirm } from './utils/prompt';
 
 async function main() {
-  let dockerfileFromHome, dockerfileFromModuleDir;
-  if ( config.dockerfile ) {
-    dockerfileFromHome = readFromHome( config.dockerfile );
-    dockerfileFromModuleDir = dockerfiles.moduleDir[ config.dockerfile ];
-  }
-
   if ( dockerfiles.cwd ) {
     if ( config.dockerfile ) {
       const dockerfileFromHome = readFromHome( config.dockerfile );
