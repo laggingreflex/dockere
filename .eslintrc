@@ -1,0 +1,16 @@
+{
+  "extends": "canonical",
+  "rules": {
+    "func-style": 0,
+    "space-before-function-paren": 0,
+    "space-in-parens": 0,
+    "sort-keys": 0,
+    "object-curly-spacing": 0,
+    "babel/object-curly-spacing": 0,
+    "no-restricted-syntax": 0,
+    "no-process-env": 0,
+    "newline-before-return": 0,
+    "newline-after-var": 0,
+    "comma-dangle": 0,
+  }
+}
