@@ -53,7 +53,7 @@ async function main() {
   }
 
   await build();
-  await run( config.command );
+  await run( config.command, config );
 }
 
 main().catch( ( err ) => {

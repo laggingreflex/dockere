@@ -10,6 +10,10 @@ const { argv: config } = yargs.options( {
     alias: [ 'd' ],
     type: 'string'
   },
+  mountHome: {
+    alias: [ 'h' ],
+    type: 'boolean'
+  }
 } );
 
 if ( !dockerfiles.cwd && !config.dockerfile && config._.length === 1 ) {
