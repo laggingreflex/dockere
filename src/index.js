@@ -57,5 +57,5 @@ async function main() {
 }
 
 main().catch( ( err ) => {
-  console.error( err.message );
+  console.error( '\nDockere Error:', err.message );
 } );
