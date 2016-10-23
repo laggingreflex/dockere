@@ -1,6 +1,6 @@
 {
   "name": "dockere",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "",
   "main": "./dist/index.js",
   "bin": "./bin.js",
@@ -10,6 +10,7 @@
     "test": "jest --config jest.json",
     "tdd": "npm run test -- --watch"
   },
+  "repository": "laggingreflex/dockere",
   "author": "laggingreflex@gmail.com",
   "license": "ISC",
   "dependencies": {

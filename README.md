@@ -1,3 +1,4 @@
+[![npm](https://img.shields.io/npm/v/dockere.svg)](https://www.npmjs.com/package/dockere)
 
 # docker*e*
 
