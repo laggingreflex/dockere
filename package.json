@@ -1,7 +1,7 @@
 {
   "name": "dockere",
-  "version": "0.0.1",
-  "description": "",
+  "version": "0.0.2",
+  "description": "Create, build, and run a docker container with current-dir mounted as a volume",
   "main": "./dist/index.js",
   "bin": "./bin.js",
   "scripts": {
