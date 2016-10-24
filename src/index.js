@@ -24,7 +24,7 @@ async function main() {
         }
         writeToHome( config.dockerfile, dockerfileFromModuleDir );
         writeToCwd( dockerfileFromModuleDir );
-      } else if ( !await confirm( `Create a new "${config.dockerfile}" dockerfile template from existing Dockerfile:` ) ) {
+      } else if ( await confirm( `Create a new "${config.dockerfile}" dockerfile template from existing Dockerfile:`, true ) ) {
         writeToHome( config.dockerfile, dockerfiles.cwd );
       } else {
         throw new Error( `The specified dockerfile context: "${config.dockerfile}" doesn't exist` );
@@ -46,8 +46,8 @@ async function main() {
     }
   }
 
-  await build();
-  await run( config.command, config );
+  await build( config );
+  await run( config );
 }
 
 main().catch( ( err ) => {
