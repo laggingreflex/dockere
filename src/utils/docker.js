@@ -1,22 +1,25 @@
 import path from 'path';
-import { exec, splitCommandStr } from './child-process';
+import { exec } from './child-process';
 import { cwdFull, cwdBase, homedir } from './fs';
 
-export function build() {
-  return exec( ...splitCommandStr( `docker build -t ${cwdBase} .` ) );
+export function build( {} = {} ) {
+  const args = [ 'build' ];
+  args.push( '--rm' );
+  args.push( '-t', cwdBase );
+  args.push( '.' );
+  return exec( 'docker', args );
 }
-export function run( command, { mountCwd = true, mountHome = false } = {} ) {
-  let args = [ 'run', '-it', '--rm' ];
+export function run( { command, mountCwd = true, mountHome = false } = {} ) {
+  const args = [ 'run', '-it', '--rm' ];
   if ( mountCwd ) {
-    args = [ ...args, '--volume', `${cwdFull}${path.sep}:/${cwdBase}` ];
+    args.push( '--volume', `${cwdFull}${path.sep}:/${cwdBase}` );
   }
   if ( mountHome ) {
-    args = [ ...args, '--volume', `${homedir}${path.sep}:/root` ];
+    args.push( '--volume', `${homedir}${path.sep}:/root` )
   }
-  args = [ ...args, cwdBase ];
+  args.push( cwdBase );
   if ( command && command.length ) {
-    args = [ ...args, ...command ];
+    args.push( ...command )
   }
-
   return exec( 'docker', args );
 }

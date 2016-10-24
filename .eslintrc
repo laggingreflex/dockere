@@ -16,6 +16,7 @@
     "comma-dangle": 0,
     "computed-property-spacing": 0,
     "init-declarations": 0,
-    "no-console": 0
+    "no-console": 0,
+    "complexity": 0
   }
 }

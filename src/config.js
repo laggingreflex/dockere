@@ -13,7 +13,8 @@ const { argv: config } = yargs.options( {
   },
   mountHome: {
     alias: [ 'm' ],
-    type: 'boolean'
+    type: 'boolean',
+    default: false
   },
   help: {
     alias: [ 'h', '?' ],
