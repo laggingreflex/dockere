@@ -1,6 +1,5 @@
-[![npm](https://img.shields.io/npm/v/dockere.svg)](https://www.npmjs.com/package/dockere)
 
-# docker*e*
+# docker*e* [![npm](https://img.shields.io/npm/v/dockere.svg)](https://www.npmjs.com/package/dockere)
 
 …as in "dock *here*"
 
@@ -92,14 +91,61 @@ Successfully built <id>
 ok
 ```
 
+### Volume mounts
+
+**dockere** offers some path improvements over Docker's default volume mount options.
+
+#### Relative host-dir mount paths
+
+Since [Docker requires host-dir to be an absolute path][1],
+**dockere** lets you choose relative paths that can either be :
+
+##### ~/home paths
+
+All paths beginning with `~` are adjusted with proper absolute path to your **home-dir**.
+Even for Windows users!
+
+Eg.: You can mount your `~/.ssh` for the container's `root`:
+```
+dockere -v ~/.ssh:/root/.ssh
+```
+
+##### Relative paths
+
+Paths that don't begin with a `/` are adjusted to absolute paths relative to **current-dir**.
+
+Eg.: You can mount a parent dir:
+```
+dockere -v ../parent:/parent
+```
+
+#### Relative container-dir volume paths
+
+Again, since [Docker requires container-dir to be an absolute path][1] as well.
+**dockere** lets you choose relative paths that are adjusted to absolute path relative to your **working-dir**, which is the same name as your current-dir but inside the docker container.
+
+\** **WARNING** \** However this creates ambiguity as to what to do with a command like this:
+
+```
+dockere -v node_modules
+```
+
+The default Docker behaviour would have been to interpret this as a [***named*** **volume**][1],
+but **dockere** will treat it as a relative path and adjust it as a container-path relative to working-dir (Eg.: `/app/node_modules` in the container).
+
+Use `--named-volume` instead to use named volumes. (todo: doesn't yet exist)
+
+
 ### Mount home
 
 You can mount your home-dir as `/root`
 ```sh
-$ dockere -m
+$ dockere -m # same as: dockere -v ~:/root
 ...
 09:02 @MyBashPrompt /docker-test
 $ cd ~/.ssh
 09:02 @MyBashPrompt /root/.ssh
 $ _
 ```
+
+[1]: https://docs.docker.com/engine/tutorials/dockervolumes/#mount-a-host-directory-as-a-data-volume

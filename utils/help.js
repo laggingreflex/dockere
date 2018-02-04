@@ -1,6 +1,8 @@
-export function printUsage( exit ) {
-  console.log( `
-    Create, build, and run a docker container with current-dir mounted as a volume
+const packageJson = require('../package.json');
+
+exports.printUsage = (exit) => {
+  console.log(`
+    ${packageJson.description}
 
     Usage: dockere [OPTION]
       -d, --dockerfile    dockerfile template to build from. Default: ubuntu
@@ -11,9 +13,8 @@ export function printUsage( exit ) {
       dockere
       dockere -d nodejs -m
       dockere -d ubuntu -c echo ok
-
-  ` );
-  if ( exit ) {
-    process.exit( 0 );
+  `);
+  if (exit) {
+    process.exit(0);
   }
-}
+};
