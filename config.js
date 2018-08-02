@@ -32,6 +32,13 @@ const config = module.exports = yargs.options({
 }).argv;
 
 
+if (config.command && config.command.length) {
+  const flags = ['-c', '--command'];
+  const index = Array.from(process.argv).findIndex(f => flags.includes(f));
+  config.command = process.argv.slice(index + 1);
+  config._ = config._.filter(e => !config.command.includes(e));
+}
+
 if (config.help) {
   printUsage(true);
 }
