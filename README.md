@@ -148,4 +148,15 @@ $ cd ~/.ssh
 $ _
 ```
 
+## Troubleshooting
+
+* The mounted directory seems to be empty
+
+  Make sure you've shared the relevant drive(s)
+
+  [![Settings > Shared Drives][share-drive-scr-l]][share-drive-scr]
+
 [1]: https://docs.docker.com/engine/tutorials/dockervolumes/#mount-a-host-directory-as-a-data-volume
+
+[share-drive-scr]: https://i.imgur.com/c6lOi8a.png
+[share-drive-scr-l]: https://i.imgur.com/c6lOi8al.png
