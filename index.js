@@ -1,12 +1,15 @@
 #!/usr/bin/env node
 
-const prompt = require('enquire-simple');
-const config = require('./config');
-const { fs, docker } = require('./utils');
+import prompt from 'enquire-simple';
+import * as config_ from './config.js';
+import { fs, docker } from './utils/index.js';
 
-main().catch((error) => process.exit(1, console.error(error)));
+main().catch(error => {
+  console.error(error);
+  process.exitCode = process.exitCode ?? 1;
+});
 
-async function main() {
+export async function main({ ...config } = { ...config_ }) {
   if (fs.dockerfiles.cwd) {
     if (config.dockerfile) {
       const dockerfileFromHome = fs.readFromHome(config.dockerfile);
@@ -25,7 +28,8 @@ async function main() {
       } else if (await prompt.confirm(`Create a new "${config.dockerfile}" dockerfile template from existing Dockerfile:`, true)) {
         fs.writeToHome(config.dockerfile, fs.dockerfiles.cwd);
       } else {
-        process.exit(2, console.error(`The specified dockerfile context: "${config.dockerfile}" doesn't exist`));
+        process.exitCode = 2;
+        throw new Error(`The specified dockerfile context: "${config.dockerfile}" doesn't exist`);
       }
     }
   } else {
@@ -40,7 +44,8 @@ async function main() {
       fs.writeToHome(config.dockerfile, dockerfileFromModuleDir);
       fs.writeToCwd(dockerfileFromModuleDir);
     } else {
-      process.exit(2, console.error(`The specified dockerfile context: "${config.dockerfile}" doesn't exist`));
+      process.exitCode = 2;
+      throw new Error(`The specified dockerfile context: "${config.dockerfile}" doesn't exist`);
     }
   }
 

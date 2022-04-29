@@ -1,38 +1,41 @@
-const os = require('os');
-const path = require('path');
-const fs = require('fs-extra');
+import os from 'os';
+import Path from 'path';
+import fs from 'fs-extra';
 
-const homedir = exports.homedir = os.homedir();
-const homeConfigDir = exports.homeConfigDir = path.join(homedir, '.dockere');
-const moduleDir = exports.moduleDir = path.join(path.dirname(__filename), '../dockerfiles');
-const cwdFull = exports.cwdFull = process.cwd();
-const cwdBase = exports.cwdBase = path.basename(cwdFull);
+const __filename = new URL('', import.meta.url).pathname.substring(1);
 
-const rootDirText = exports.rootDirText = '<root-dir>';
-const rootDirRegex = exports.rootDirRegex = new RegExp(rootDirText, 'ig');
-const cwdBaseRegex = exports.cwdBaseRegex = new RegExp('/?' + cwdBase, 'ig');
+export const homedir = os.homedir();
+export const homeConfigDir = Path.join(homedir, '.dockere');
+export const moduleDir = Path.join(Path.dirname(__filename), '../dockerfiles');
+export const cwdFull = process.cwd();
+export const cwdBase = Path.basename(cwdFull);
 
-const readFile = exports.readFile = (...paths) => {
+export const rootDirText = '<root-dir>';
+export const rootDirRegex = new RegExp(rootDirText, 'ig');
+export const cwdBaseRegex = new RegExp('/?' + cwdBase, 'ig');
+
+export function readFile(...paths) {
   try {
-    return fs.readFileSync(path.join(...paths), 'utf8');
+    const path = Path.join(...paths);
+    return fs.readFileSync(path, 'utf8');
   } catch (error) {
     return false;
   }
 };
 
-const readFromHome = exports.readFromHome = (file) => {
+export function readFromHome(file) {
   return readFile(homeConfigDir, file);
 };
 
-const readFromModuleDir = exports.readFromModuleDir = (file) => {
+export function readFromModuleDir(file) {
   return readFile(moduleDir, file + '.dockerfile');
 };
 
-const readFromCwd = exports.readFromCwd = (file) => {
+export function readFromCwd(file) {
   return readFile(cwdFull, file);
 };
 
-const dockerfiles = exports.dockerfiles = {
+export const dockerfiles = {
   moduleDir: {
     alpine: readFromModuleDir('alpine'),
     nodejs: readFromModuleDir('nodejs'),
@@ -46,23 +49,23 @@ if (!dockerfiles.moduleDir) {
   throw new Error('moduleDir Dockerfile not found.');
 }
 
-const replaceRootDirText = exports.replaceRootDirText = (str) => {
+export function replaceRootDirText(str) {
   return str.replace(rootDirRegex, '/' + cwdBase);
 };
-const replaceCwdBaseText = exports.replaceCwdBaseText = (str) => {
+export function replaceCwdBaseText(str) {
   return str.replace(cwdBaseRegex, rootDirText);
 };
 
-const writeFile = exports.writeFile = ([...paths], data) => {
-  fs.outputFileSync(path.join(...paths), data);
+export function writeFile([...paths], data) {
+  fs.outputFileSync(Path.join(...paths), data);
 };
 
-const writeToHome = exports.writeToHome = (file, data) => {
+export function writeToHome(file, data) {
   writeFile([homeConfigDir, file], data);
   dockerfiles.home = data;
 };
 
-const writeToCwd = exports.writeToCwd = (data) => {
+export function writeToCwd(data) {
   writeFile([cwdFull, 'Dockerfile'], replaceRootDirText(data));
   dockerfiles.cwd = data;
 };

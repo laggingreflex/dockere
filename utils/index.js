@@ -1,5 +1,5 @@
 
-exports['child-process'] = require('./child-process');
-exports['docker'] = require('./docker');
-exports['fs'] = require('./fs');
-exports['help'] = require('./help');
+export * as childProcess from './child-process.js';
+export * as docker from './docker.js';
+export * as fs from './fs.js';
+export * as help from './help.js';

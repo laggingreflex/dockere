@@ -1,8 +1,8 @@
-const Path = require('path');
-const cp = require('./child-process');
-const fs = require('./fs');
+import Path from 'path';
+import * as cp from './child-process.js';
+import * as fs from './fs.js';
 
-const build = exports.build = ({} = {}) => {
+export function build({} = {}) {
   const args = ['build'];
   args.push('--rm');
   args.push('-t', fs.cwdBase);
@@ -11,7 +11,7 @@ const build = exports.build = ({} = {}) => {
   return cp.exec('docker', args);
 };
 
-const run = exports.run = ({ command, noMountCwd = false, mountHome = false, volume } = {}) => {
+export function run({ command, noMountCwd = false, mountHome = false, volume } = {}) {
   const args = ['run', '-it', '--rm'];
   if (!noMountCwd) {
     args.push('--volume', `${fs.cwdFull}${Path.sep}:/${fs.cwdBase}`);
@@ -45,7 +45,7 @@ const run = exports.run = ({ command, noMountCwd = false, mountHome = false, vol
   return cp.exec('docker', args);
 };
 
-const fixVolumePath = exports.fixVolumePath = (p, base) => {
+export function fixVolumePath(p, base) {
   const o = p;
   p = p.replace(/[\\]+/g, '/');
   if (p.charAt(0) !== '/') {
@@ -57,7 +57,7 @@ const fixVolumePath = exports.fixVolumePath = (p, base) => {
   return p;
 };
 
-const fixMountPath = exports.fixMountPath = (p, homedir, base) => {
+export function fixMountPath(p, homedir, base) {
   const o = p;
   if (p.charAt(0) === '~') {
     p = Path.join(homedir, p.substr(1));

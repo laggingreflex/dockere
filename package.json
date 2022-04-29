@@ -4,6 +4,7 @@
   "description": "Create, build, and run a docker container with current-dir mounted as a volume",
   "main": "index.js",
   "bin": "index.js",
+  "type": "module",
   "repository": "laggingreflex/dockere",
   "dependencies": {
     "child-process-promise": "^2.2.1",

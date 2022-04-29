@@ -1,6 +1,6 @@
-const packageJson = require('../package.json');
+import packageJson from '../package.json' assert { type: 'json' }
 
-exports.printUsage = (exit) => {
+export function printUsage(exit) {
   console.log(`
     ${packageJson.description}
 

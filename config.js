@@ -1,8 +1,9 @@
-const yargs = require('yargs');
-const { dockerfiles } = require('./utils/fs');
-const { printUsage } = require('./utils/help');
+import yargs from 'yargs';
+import { hideBin } from 'yargs/helpers'
+import { dockerfiles } from './utils/fs.js';
+import { printUsage } from './utils/help.js';
 
-const config = module.exports = yargs.options({
+export const config = yargs(hideBin(process.argv)).options({
   command: {
     alias: ['c'],
     type: 'array'
