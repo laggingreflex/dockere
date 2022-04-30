@@ -16,7 +16,7 @@ export const options = {
   dockerfile: {
     alias: ['d'],
     type: 'string',
-    description: `Dockerfile to use. Eg: ${dockerfileChoices.join()}`,
+    description: `Dockerfile to use.\nEg: ${dockerfileChoices.join()}`,
     // choices: dockerfileChoices,
     // default: 'ubuntu',
     coerce(value) {
@@ -33,22 +33,51 @@ export const options = {
     },
     // skipValidation: true,
   },
-  volume: { alias: ['v'], type: 'string' },
-  mountHome: { alias: ['h'], type: 'boolean', description: `Mount home directory (${homedir})` },
-  noMountCwd: { alias: ['n'], type: 'boolean', description: `Don't mount current directory (${cwd}). Mounts by default` },
-  mountDrives: { alias: ['D'], type: 'boolean', description: `Mount root drives in container's mount points /mnt/host/…` },
-  noMountCwd: { alias: ['n'], type: 'boolean', description: `Don't mount current directory. Mounts by default\n${cwd}` },
+  command: {
+    alias: ['c'],
+    type: 'array',
+    default: ['bash'],
+    description: 'Command to execute'
+  },
+  volume: {
+    alias: ['v'],
+    type: 'string',
+    description: 'Volume/mount points\n<host>:<container>'
+  },
+  mountHome: {
+    alias: ['h'],
+    type: 'boolean',
+    description: `Mount home directory\nShort for --volume ${homedir}:/root`
+  },
+  mountDrives: {
+    alias: ['D'],
+    type: 'boolean',
+    description: `<Experimental> Mount root drives in container's mount points /mnt/host/…\nShort for --volume C:\\:/mnt/host/c`
+  },
+  noMountCwd: {
+    alias: ['n'],
+    type: 'boolean',
+    description: `Don't mount current directory. Mounts by default\n${cwd}`
+  },
 };
 
 export default yargs(hideBin(process.argv))
   .options(options)
   .scriptName(packageJson.name)
   .command({
-    command: '$0 [dockerfile] [volume]',
+    command: '$0 [dockerfile] [command]',
     description: packageJson.description,
     handler: main,
   })
   .demandCommand()
   .wrap(0)
   .version(packageJson.version)
+  .example([
+    ['$0', 'Run current-dir in a default (ubuntu) container'],
+    ['$0 node', 'Run current-dir in a "node" container'],
+    ['$0 -h', `Mount the host's home-dir as container's ~/`],
+    ['$0 -D', `Mounts the hosts's root (C:\|D:\|…) drives in container's mount points /mnt/host/{c|d|…}`],
+    ['$0 -v node_modules', `Create a new volume '<root-dir>/node_modules' in the container`],
+    ['$0 -c echo hi', `Execute a command and exit`],
+  ])
   .argv;

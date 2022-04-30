@@ -28,15 +28,31 @@ npm i -g dockere
 ## Usage
 
 ```sh
-Usage: dockere [OPTION]
-  -d, --dockerfile    dockerfile template to build from. Default: ubuntu
-  -c, --command       command to execute when run. Default: bash -li
-  -m, --mount-home    whether to mount your home-dir as /root. Defaut: no
+dockere [dockerfile] [command]
+
+Create, build, and run a docker container with current-dir mounted as a volume
+
+Options:
+      --help               Show help  [boolean]
+  -d, --dockerfile         Dockerfile to use.
+                           Eg: alpine,nodejs,ubuntu,home,cwd  [string]
+  -c, --command            Command to execute  [array] [default: ["bash"]]
+  -v, --volume             Volume/mount points
+                           <host>:<container>  [string]
+  -h, --mountHome          Mount home directory
+                           Short for --volume ~:/root  [boolean]
+  -D, --mountDrives        <Experimental> Mount root drives in container's mount points /mnt/host/…
+                           Short for --volume C:\:/mnt/host/c  [boolean]
+  -n, --noMountCwd         Don't mount current directory. Mounts by default [boolean]
+      --version            Show version number  [boolean]
 
 Examples:
-  dockere
-  dockere -d nodejs -m
-  dockere -d ubuntu -c echo ok
+  dockere                  Run current-dir in a default (ubuntu) container
+  dockere node             Run current-dir in a "node" container
+  dockere -h               Mount the host's home-dir as container's ~/
+  dockere -D               Mounts the hosts's root (C:|D:|…) drives in container's mount points /mnt/host/{c|d|…}
+  dockere -v node_modules  Create a new volume '<root-dir>/node_modules' in the container
+  dockere -c echo hi       Execute a command and exit
 ```
 
 ## Features

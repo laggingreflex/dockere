@@ -51,7 +51,7 @@ export async function run({ command, noMountCwd = false, mountHome = false, moun
     args.push(...command);
   }
   console.log('Executing:', 'docker', ...args);
-  return cp.exec('docker', args);
+  return await cp.exec('docker', args);
 };
 
 export function fixVolumePath(p, base) {
