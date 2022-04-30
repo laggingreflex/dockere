@@ -53,7 +53,10 @@ if (!dockerfiles.moduleDir) {
 }
 
 export function replaceRootDirText(str) {
-  return str.replace(rootDirRegex, '/' + cwdBase);
+  return str.replaceAll(rootDirRegex, '/' + cwdBase);
+};
+export function replaceRootDirTextReverse(str) {
+  return str.replaceAll('/' + cwdBase, '<root-dir>');
 };
 export function replaceCwdBaseText(str) {
   return str.replace(cwdBaseRegex, rootDirText);
@@ -67,7 +70,7 @@ export function writeFile([...paths], data) {
 
 export function writeToHome(file, data) {
   dockerfiles.home = data;
-  return writeFile([homeConfigDir, file], data);
+  return writeFile([homeConfigDir, file], replaceRootDirTextReverse(data));
 };
 
 export function writeToCwd(data) {
