@@ -36,6 +36,8 @@ export const options = {
   volume: { alias: ['v'], type: 'string' },
   mountHome: { alias: ['h'], type: 'boolean', description: `Mount home directory (${homedir})` },
   noMountCwd: { alias: ['n'], type: 'boolean', description: `Don't mount current directory (${cwd}). Mounts by default` },
+  mountDrives: { alias: ['D'], type: 'boolean', description: `Mount root drives in container's mount points /mnt/host/…` },
+  noMountCwd: { alias: ['n'], type: 'boolean', description: `Don't mount current directory. Mounts by default\n${cwd}` },
 };
 
 export default yargs(hideBin(process.argv))

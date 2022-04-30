@@ -1,6 +1,7 @@
 import Path from 'path';
 import * as cp from './child-process.js';
 import * as fs from './fs.js';
+import drivelist from 'drivelist';
 
 export function build({} = {}) {
   const args = ['build'];
@@ -11,13 +12,21 @@ export function build({} = {}) {
   return cp.exec('docker', args);
 };
 
-export function run({ command, noMountCwd = false, mountHome = false, volume } = {}) {
+export async function run({ command, noMountCwd = false, mountHome = false, mountDrives = false, volume } = {}) {
   const args = ['run', '-it', '--rm'];
   if (!noMountCwd) {
     args.push('--volume', `${fs.cwdFull}${Path.sep}:/${fs.cwdBase}`);
   }
   if (mountHome) {
     args.push('--volume', `${fs.homedir}${Path.sep}:/root`);
+  }
+  if (mountDrives) {
+    const drives = await drivelist.list();
+    for (const { mountpoints } of drives) {
+      for (const { path } of mountpoints) {
+        args.push('--volume', `${path}${Path.sep}:/mnt/host/${path.toLowerCase().replace(/\:\\$/, '')}`);
+      }
+    }
   }
   if (volume) {
     if (!Array.isArray(volume)) {
