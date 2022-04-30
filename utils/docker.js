@@ -31,7 +31,7 @@ export function run({ command, noMountCwd = false, mountHome = false, volume } =
       } else {
         volume = paths.pop();
         volume = fixVolumePath(volume, fs.cwdBase);
-        let mount = paths.join('');
+        let mount = paths.join(':');
         mount = fixMountPath(mount, fs.homedir, fs.cwdFull);
         args.push('--volume', `${mount}${Path.sep}:/${volume}`);
       }
