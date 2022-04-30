@@ -19,7 +19,7 @@ export const cwdBaseRegex = new RegExp('/?' + cwdBase, 'ig');
 export function readFile(...paths) {
   try {
     const path = Path.join(...paths);
-    const data = fs.readFileSync(path, 'utf8');
+    const data = replaceRootDirText(fs.readFileSync(path, 'utf8'));
     return new File(path, data);
   } catch (error) {
     return false;
@@ -34,7 +34,7 @@ export function readFromModuleDir(file) {
   return readFile(moduleDir, file + '.dockerfile');
 };
 
-export function readFromCwd(file) {
+export function readFromCwd(file = 'Dockerfile') {
   return readFile(cwdFull, file);
 };
 
