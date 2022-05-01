@@ -12,7 +12,7 @@ export function build({} = {}) {
   return cp.exec('docker', args);
 };
 
-export async function run({ command, noMountCwd = false, mountHome = false, mountDrives = false, volume } = {}) {
+export async function run({ command, noMountCwd = false, mountHome = false, mountDrives = false, volume, passThrough } = {}) {
   const args = ['run', '-it', '--rm'];
   if (!noMountCwd) {
     args.push('--volume', `${fs.cwdFull}${Path.sep}:/${fs.cwdBase}`);
@@ -46,6 +46,7 @@ export async function run({ command, noMountCwd = false, mountHome = false, moun
       }
     });
   }
+  args.push(...(passThrough ?? []));
   args.push(fs.cwdBase);
   if (command && command.length) {
     args.push(...command);

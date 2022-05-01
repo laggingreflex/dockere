@@ -5,4 +5,4 @@ FROM alpine
 
 WORKDIR <root-dir>
 
-CMD /bin/sh
+CMD sh
