@@ -28,9 +28,7 @@ npm i -g dockere
 ## Usage
 
 ```
-dockere [dockerfile] [command]
-
-Create, build, and run a docker container with current-dir mounted as a volume
+dockere [..options] [..non-options passed to docker run]
 
 Options:
       --help               Show help  [boolean]

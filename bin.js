@@ -67,13 +67,14 @@ export const options = {
 };
 
 export default yargs(hideBin(process.argv))
+.scriptName(packageJson.name)
   .options(options)
-  .scriptName(packageJson.name)
   .command({
-    command: '$0 [dockerfile] [command]',
+    command: '$0',
     description: packageJson.description,
-    handler(argv) {
-      argv.passThrough = [...(argv?.passThrough ?? []), ...argv._];
+    handler(argv, ...rest) {
+      const passThrough = [...(argv?.passThrough ?? []), ...argv._];
+      argv.passThrough = passThrough;
       return main(argv);
     },
   })
@@ -88,5 +89,10 @@ export default yargs(hideBin(process.argv))
     ['$0 -v node_modules', `Create a new volume '<root-dir>/node_modules' in the container`],
     ['$0 -c echo hi', `Execute a command and exit`],
     ['$0 -- --port 8080:8080', `Expose the 8080 port`],
-  ])
+  ]).parserConfiguration({
+    'strip-aliased': true,
+    'strip-dashed': true,
+    'unknown-options-as-args': true,
+    'halt-at-non-option': true,
+  })
   .argv;
