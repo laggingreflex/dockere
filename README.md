@@ -46,13 +46,13 @@ Options:
       --version            Show version number  [boolean]
 
 Examples:
-  dockere                      Run current-dir in a default (ubuntu) container
-  dockere node                 Run current-dir in a "node" container
-  dockere -h                   Mount the host's home-dir as container's ~/
-  dockere -D                   Mounts the hosts's root (C:|D:|…) drives in container's mount points /mnt/host/{c|d|…}
-  dockere -v node_modules      Create a new volume '<root-dir>/node_modules' in the container
-  dockere -c echo hi           Execute a command and exit
-  dockere -- --port 8080:8080  Expose the 8080 port
+  dockere                  Run current-dir in a default (ubuntu) container
+  dockere node             Run current-dir in a "node" container
+  dockere -h               Mount the host's home-dir as container's ~/
+  dockere -D               Mounts the hosts's root (C:|D:|…) drives in container's mount points /mnt/host/{c|d|…}
+  dockere -v node_modules  Create a new volume '<root-dir>/node_modules' in the container
+  dockere -c echo hi       Execute a command and exit
+  dockere -- -p 8080:8080  Expose the 8080 port by passing -p flag to docker run
 ```
 
 ## Features

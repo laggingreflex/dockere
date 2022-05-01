@@ -88,7 +88,7 @@ export default yargs(hideBin(process.argv))
     ['$0 -D', `Mounts the hosts's root (C:\|D:\|…) drives in container's mount points /mnt/host/{c|d|…}`],
     ['$0 -v node_modules', `Create a new volume '<root-dir>/node_modules' in the container`],
     ['$0 -c echo hi', `Execute a command and exit`],
-    ['$0 -- --port 8080:8080', `Expose the 8080 port`],
+    ['$0 -- -p 8080:8080', `Expose the 8080 port by passing -p flag to docker run`],
   ]).parserConfiguration({
     'strip-aliased': true,
     'strip-dashed': true,
