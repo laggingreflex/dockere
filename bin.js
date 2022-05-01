@@ -36,7 +36,7 @@ export const options = {
   command: {
     alias: ['c'],
     type: 'array',
-    default: ['bash'],
+    // default: ['bash'],
     description: 'Command to execute'
   },
   volume: {
