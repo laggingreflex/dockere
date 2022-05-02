@@ -1,26 +1,45 @@
 import Path from 'path';
+import drivelist from 'drivelist';
+import Docker from 'dockerode';
+import { setTimeout } from 'timers/promises';
 import * as cp from './child-process.js';
 import * as fs from './fs.js';
-import drivelist from 'drivelist';
 
-export function build({} = {}) {
+const docker = new Docker();
+
+export async function build(opts = {}) {
+
+  if (await getImage(fs.cwdBase) && !opts.force) {
+    console.log('Skipping rebuilding existing image:', fs.cwdBase)
+    console.log('Pass --force-rebuild to rebuild');
+    return;
+  }
+
   const args = ['build'];
-  args.push('--rm');
+  // args.push('--rm');
   args.push('-t', fs.cwdBase);
+  // args.push('--label', fs.cwdBase);
   args.push('.');
   console.log('Executing:', 'docker', ...args);
   return cp.exec('docker', args);
 };
 
-export async function run({ command, noMountCwd = false, mountHome = false, mountDrives = false, volume, passThrough } = {}) {
+export async function run(opts = {}) {
+
+  if (await getContainer(fs.cwdBase) && !opts.force) {
+    console.log('Skipping recreating existing container:', fs.cwdBase)
+    console.log('Pass --force-rebuild to use new container');
+    return await exec(...arguments);
+  }
+
   const args = ['run', '-it', '--rm'];
-  if (!noMountCwd) {
+  if (!opts.noMountCwd) {
     args.push('--volume', `${fs.cwdFull}${Path.sep}:/${fs.cwdBase}`);
   }
-  if (mountHome) {
+  if (opts.mountHome) {
     args.push('--volume', `${fs.homedir}${Path.sep}:/root`);
   }
-  if (mountDrives) {
+  if (opts.mountDrives) {
     const drives = await drivelist.list();
     for (const { mountpoints } of drives) {
       for (const { path } of mountpoints) {
@@ -28,11 +47,11 @@ export async function run({ command, noMountCwd = false, mountHome = false, moun
       }
     }
   }
-  if (volume) {
-    if (!Array.isArray(volume)) {
-      volume = [volume];
+  if (opts.volume) {
+    if (!Array.isArray(opts.volume)) {
+      opts.volume = [opts.volume];
     }
-    volume.forEach(volume => {
+    opts.volume.forEach(volume => {
       const paths = volume.split(/:/g);
       if (paths.length <= 1) {
         volume = fixVolumePath(volume, fs.cwdBase);
@@ -46,14 +65,56 @@ export async function run({ command, noMountCwd = false, mountHome = false, moun
       }
     });
   }
-  args.push(...(passThrough ?? []));
+  args.push(...(opts.passThrough ?? []));
   args.push(fs.cwdBase);
-  if (command && command.length) {
-    args.push(...command);
+  if (opts.command && opts.command.length) {
+    args.push(...opts.command);
   }
   console.log('Executing:', 'docker', ...args);
   return await cp.exec('docker', args);
 };
+
+export async function exec(opts = {}) {
+  const container = await getContainer(fs.cwdBase);
+  const exec = await container.exec({
+    Cmd: ['bash'],
+    Tty: true,
+    OpenStdin: true,
+    AttachStdin: true,
+    AttachStdout: true,
+    AttachStderr: true,
+    StdinOnce: true,
+  });
+  const stream = await exec.start({ stdin: true });
+  container.modem.demuxStream(stream, process.stdout, process.stderr);
+  process.stdin.setRawMode(true);
+  process.stdin.pipe(stream);
+  /* Work around to stream.on('end') not firing on windows. https://github.com/apocas/dockerode/issues/534 */
+  while ((await exec.inspect()).Running) await setTimeout(1000);
+  stream.destroy();
+  process.stdin.pause();
+  process.stdin.setRawMode(false);
+}
+
+
+export async function getImage(tagToFind) {
+  const images = await docker.listImages();
+  for (const image of images) {
+    for (const tag of image.RepoTags) {
+      if (tag.startsWith(tagToFind)) return image;
+    }
+  }
+}
+
+export async function getContainer(tagToFind) {
+  const containers = await docker.listContainers();
+  for (const container of containers) {
+    if (container.Image === tagToFind) {
+      return docker.getContainer(container.Id);
+    }
+  }
+}
+
 
 export function fixVolumePath(p, base) {
   const o = p;
