@@ -7,8 +7,6 @@
   "type": "module",
   "repository": "laggingreflex/dockere",
   "dependencies": {
-    "child-process-promise": "^2.2.1",
-    "dockerode": "^3.3.1",
     "drivelist": "^9.2.4",
     "enquire-simple": "^2.4.0",
     "fs-extra": "^10.1.0",

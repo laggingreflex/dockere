@@ -64,6 +64,12 @@ export const options = {
     type: 'boolean',
     description: `Pass through other options/args to docker run`
   },
+  build: {
+    alias: ['b'],
+    type: 'boolean',
+    description: `Force re-build image (docker build)`
+  },
+
 };
 
 export default yargs(hideBin(process.argv))
@@ -95,4 +101,9 @@ export default yargs(hideBin(process.argv))
     'unknown-options-as-args': true,
     'halt-at-non-option': true,
   })
+  // .exitProcess(false)
+  // .fail((msg, error, yargs) => {
+  //   console.log('fail')
+  // })
+  .showHelpOnFail(false)
   .argv;
