@@ -28,29 +28,33 @@ npm i -g dockere
 ## Usage
 
 ```
+
 dockere [..options] [..non-options passed to docker run]
 
 Options:
-      --help               Show help  [boolean]
-  -d, --dockerfile         Dockerfile to use.
-                           Eg: alpine,nodejs,ubuntu,home,cwd  [string]
-  -c, --command            Command to execute  [array] [default: ["bash"]]
-  -v, --volume             Volume/mount points
-                           <host>:<container>  [string]
-  -h, --mountHome          Mount home directory
-                           Short for --volume ~:/root  [boolean]
-  -D, --mountDrives        <Experimental> Mount root drives in container's mount points /mnt/host/…
-                           Short for --volume C:\:/mnt/host/c  [boolean]
-  -n, --noMountCwd         Don't mount current directory. Mounts by default [boolean]
-      --passThrough, --    Pass through other options/args to docker run  [boolean]
-      --version            Show version number  [boolean]
+      --help             Show help
+  -d, --dockerfile       Dockerfile to use.
+                         Eg: alpine,nodejs,ubuntu,home,cwd
+  -c, --command          Command to execute
+  -v, --volume           Volume/mount points
+                         <host>:<container>
+  -h, --mountHome        Mount home directory
+                         Short for --volume ~:/root
+  -D, --mountDrives      <Experimental> Mount root drives in container's mount points /mnt/host/…
+                         Short for --volume C:\:/mnt/host/c
+  -n, --noMountCwd       Don't mount current directory. Mounts by default
+      --passThrough, --  Pass through other options/args to docker run
+  -b, --build            Force re-build image (docker build)
+  -t, --tag              Tag to use for the image
+      --workdir          Workdir to use [default: "/app"]
+      --version          Show version number
 
 Examples:
   dockere                  Run current-dir in a default (ubuntu) container
   dockere node             Run current-dir in a "node" container
   dockere -h               Mount the host's home-dir as container's ~/
   dockere -D               Mounts the hosts's root (C:|D:|…) drives in container's mount points /mnt/host/{c|d|…}
-  dockere -v node_modules  Create a new volume '<root-dir>/node_modules' in the container
+  dockere -v node_modules  Create a new volume '<workdir>/node_modules' in the container
   dockere -c echo hi       Execute a command and exit
   dockere -- -p 8080:8080  Expose the 8080 port by passing -p flag to docker run
 ```
@@ -94,7 +98,7 @@ $ dockere -d custom
 
 It can save these, or any additional templates you create in your `home-dir/.dockere`
 
-When saving in home-dir, it replaces all ocurrances of current-dir with template tag `<root-dir>`, and vice-versa when loading from home-dir, so that you can use these in any other directory.
+When saving in home-dir, it replaces all ocurrances of current-dir with template tag `<workdir>`, and vice-versa when loading from home-dir, so that you can use these in any other directory.
 
 ### Command
 

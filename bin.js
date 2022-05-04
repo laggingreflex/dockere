@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import OS from 'os';
+import Path from 'path';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers'
 import { dockerfiles } from './utils/fs.js';
@@ -9,6 +10,7 @@ import main from './index.js';
 
 export const cwd = process.cwd();
 export const homedir = OS.homedir();
+export const cwdBasename = Path.basename(cwd);
 
 export const dockerfileChoices = [...Object.keys(dockerfiles.moduleDir), 'home', 'cwd'];
 
@@ -69,11 +71,27 @@ export const options = {
     type: 'boolean',
     description: `Force re-build image (docker build)`
   },
+  tag: {
+    alias: ['t'],
+    type: 'string',
+    default: cwdBasename,
+    description: `Tag to use for the image`
+  },
+  workdir: {
+    alias: [],
+    type: 'string',
+    default: '/app',
+    description: `Workdir to use`,
+    coerce(workdir) {
+      if (!workdir.startsWith('/')) workdir = '/' + workdir;
+      return workdir;
+    }
+  },
 
 };
 
 export default yargs(hideBin(process.argv))
-.scriptName(packageJson.name)
+  .scriptName(packageJson.name)
   .options(options)
   .command({
     command: '$0',
@@ -92,7 +110,7 @@ export default yargs(hideBin(process.argv))
     ['$0 node', 'Run current-dir in a "node" container'],
     ['$0 -h', `Mount the host's home-dir as container's ~/`],
     ['$0 -D', `Mounts the hosts's root (C:\|D:\|…) drives in container's mount points /mnt/host/{c|d|…}`],
-    ['$0 -v node_modules', `Create a new volume '<root-dir>/node_modules' in the container`],
+    ['$0 -v node_modules', `Create a new volume '<workdir>/node_modules' in the container`],
     ['$0 -c echo hi', `Execute a command and exit`],
     ['$0 -- -p 8080:8080', `Expose the 8080 port by passing -p flag to docker run`],
   ]).parserConfiguration({

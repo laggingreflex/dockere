@@ -4,13 +4,13 @@ import * as cp from './child-process.js';
 import * as fs from './fs.js';
 
 export async function build(opts = {}) {
-  if (await exists(fs.cwdBase) && !opts.renew) {
-    if (!opts.silent) console.log(`Image '${fs.cwdBase}' already exists. Pass --build to re-build`);
+  if (await exists(opts.tag) && !opts.build) {
+    if (!opts.silent) console.log(`Image '${opts.tag}' already exists. Pass --build to re-build`);
     return;
   }
   return cp.exec('docker', [
     'build',
-    '-t', fs.cwdBase,
+    '-t', opts.tag,
     '.'
   ].filter(Boolean));
 };
@@ -18,7 +18,7 @@ export async function build(opts = {}) {
 export async function run(opts = {}) {
   const args = ['run', '-it', '--rm'];
   if (!opts.noMountCwd) {
-    args.push('--volume', `${fs.cwdFull}${Path.sep}:/${fs.cwdBase}`);
+    args.push('--volume', `${fs.cwdFull}${Path.sep}:${opts.workdir}`);
   }
   if (opts.mountHome) {
     args.push('--volume', `${fs.homedir}${Path.sep}:/root`);
@@ -50,7 +50,7 @@ export async function run(opts = {}) {
     });
   }
   args.push(...(opts.passThrough ?? []));
-  args.push(fs.cwdBase);
+  args.push(opts.tag);
   if (opts.command && opts.command.length) {
     args.push(...opts.command);
   } else {

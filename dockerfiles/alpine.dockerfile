@@ -3,6 +3,6 @@ FROM alpine
 # RUN apt-get update
 # RUN apt-get upgrade -y
 
-WORKDIR <root-dir>
+WORKDIR <workdir>
 
 CMD sh

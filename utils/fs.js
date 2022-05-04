@@ -9,17 +9,19 @@ export const homedir = os.homedir();
 export const homeConfigDir = Path.join(homedir, '.dockere');
 export const moduleDir = Path.join(Path.dirname(__filename), '../dockerfiles');
 export const cwdFull = process.cwd();
-export const cwdBase = Path.basename(cwdFull);
+// export const cwdBase = Path.basename(cwdFull);
 export const cwdDockerfile = Path.join(cwdFull, 'Dockerfile');
 
-export const rootDirText = '<root-dir>';
-export const rootDirRegex = new RegExp(rootDirText, 'ig');
-export const cwdBaseRegex = new RegExp('/?' + cwdBase, 'ig');
+export const defaultWorkdir = '/app';
+
+export const workdirText = '<workdir>';
+export const workdirRegex = new RegExp(workdirText, 'ig');
+export const defaultWorkdirRegex = new RegExp(defaultWorkdir, 'ig');
 
 export function readFile(...paths) {
   try {
     const path = Path.join(...paths);
-    const data = replaceRootDirText(fs.readFileSync(path, 'utf8'));
+    const data = replaceWorkdirText(fs.readFileSync(path, 'utf8'));
     return new File(path, data);
   } catch (error) {
     return false;
@@ -52,14 +54,14 @@ if (!dockerfiles.moduleDir) {
   throw new Error('moduleDir Dockerfile not found.');
 }
 
-export function replaceRootDirText(str) {
-  return str.replaceAll(rootDirRegex, '/' + cwdBase);
+export function replaceWorkdirText(str) {
+  return str.replaceAll(workdirRegex, defaultWorkdir);
 };
-export function replaceRootDirTextReverse(str) {
-  return str.replaceAll('/' + cwdBase, '<root-dir>');
+export function replaceWorkdirTextReverse(str) {
+  return str.replaceAll(defaultWorkdir, '<workdir>');
 };
-export function replaceCwdBaseText(str) {
-  return str.replace(cwdBaseRegex, rootDirText);
+export function replaceDefaultWorkdirText(str) {
+  return str.replace(defaultWorkdirRegex, workdirText);
 };
 
 export function writeFile([...paths], data) {
@@ -70,10 +72,10 @@ export function writeFile([...paths], data) {
 
 export function writeToHome(file, data) {
   dockerfiles.home = data;
-  return writeFile([homeConfigDir, file], replaceRootDirTextReverse(data));
+  return writeFile([homeConfigDir, file], replaceWorkdirTextReverse(data));
 };
 
 export function writeToCwd(data) {
-  writeFile([cwdFull, 'Dockerfile'], replaceRootDirText(data));
+  writeFile([cwdFull, 'Dockerfile'], replaceWorkdirText(data));
   dockerfiles.cwd = data;
 };
