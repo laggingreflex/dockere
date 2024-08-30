@@ -1,5 +1,4 @@
 import Path from 'path';
-import drivelist from 'drivelist';
 import * as cp from './child-process.js';
 import * as fs from './fs.js';
 
@@ -24,6 +23,7 @@ export async function run(opts = {}) {
     args.push('--volume', `${fs.homedir}${Path.sep}:/root`);
   }
   if (opts.mountDrives) {
+    const drivelist = await import('drivelist');
     const drives = await drivelist.list();
     for (const { mountpoints } of drives) {
       for (const { path } of mountpoints) {
