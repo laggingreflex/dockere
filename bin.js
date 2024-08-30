@@ -5,7 +5,7 @@ import Path from 'path';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers'
 import { dockerfiles } from './utils/fs.js';
-import packageJson from './package.json' assert { type: 'json' };
+import packageJson from './package.json' with { type: 'json' };
 import main from './index.js';
 
 export const cwd = process.cwd();
