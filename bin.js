@@ -75,7 +75,10 @@ export const options = {
     alias: ['t'],
     type: 'string',
     default: cwdBasename,
-    description: `Tag to use for the image`
+    description: `Tag to use for the image`,
+    coerce(value) {
+      return value.toLowerCase();
+    },
   },
   workdir: {
     alias: [],
