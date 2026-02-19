@@ -9,7 +9,7 @@ export const homedir = os.homedir();
 export const homeConfigDir = Path.join(homedir, '.dockere');
 export const moduleDir = Path.join(Path.dirname(__filename), '../dockerfiles');
 export const cwdFull = process.cwd();
-// export const cwdBase = Path.basename(cwdFull);
+export const cwdBase = Path.basename(cwdFull);
 export const cwdDockerfile = Path.join(cwdFull, 'Dockerfile');
 
 export const defaultWorkdir = '/app';
