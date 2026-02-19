@@ -50,7 +50,7 @@ export async function run(opts = {}) {
         volume = fixVolumePath(volume, fs.cwdBase);
         let mount = paths.join(':');
         mount = fixMountPath(mount, fs.homedir, fs.cwdFull);
-        args.push('--volume', `${mount}${Path.sep}:/${volume}`);
+        args.push('--volume', `${mount}${Path.sep}:${volume}`);
       }
     });
   }
