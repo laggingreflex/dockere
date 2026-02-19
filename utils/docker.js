@@ -44,6 +44,9 @@ export async function run(opts = {}) {
         args.push('--volume', `${volume}`);
       } else {
         volume = paths.pop();
+        if (volume.startsWith('~')) {
+          volume = '/root' + volume.substr(1);
+        }
         volume = fixVolumePath(volume, fs.cwdBase);
         let mount = paths.join(':');
         mount = fixMountPath(mount, fs.homedir, fs.cwdFull);
