@@ -45,6 +45,7 @@ export const dockerfiles = {
     alpine: readFromModuleDir('alpine'),
     nodejs: readFromModuleDir('nodejs'),
     ubuntu: readFromModuleDir('ubuntu'),
+    codex: readFromModuleDir('codex'),
   },
   home: readFromHome('Dockerfile'),
   cwd: readFromCwd('Dockerfile')
