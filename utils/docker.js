@@ -38,7 +38,11 @@ export async function run(opts = {}) {
       opts.volume = [opts.volume];
     }
     opts.volume.forEach(volume => {
-      const paths = volume.split(/:/g);
+      let paths = volume.split(/:/g);
+      if (paths.length <=1 && volume.startsWith('~')) {
+        /* This case is a bit ambiguous since it could be either a named volume or a host-dir volume using ~ for the homedir. We'll assume it's a host-dir volume since named volumes can't start with ~ */
+        paths = [volume, volume];
+      }
       if (paths.length <= 1) {
         volume = fixVolumePath(volume, fs.cwdBase);
         args.push('--volume', `${volume}`);
