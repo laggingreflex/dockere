@@ -71,7 +71,8 @@ export async function run(opts = {}) {
   args.push(...(opts.passThrough ?? []));
   args.push(opts.tag);
   if (opts.command && opts.command.length) {
-    args.push(...opts.command);
+    // args.push(...opts.command);
+    args.push(`"${arrify(opts.command).join(' ')}"`);
   } else if (opts.command !== false) {
     args.push('bash');
   }
