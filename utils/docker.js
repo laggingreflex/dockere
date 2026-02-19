@@ -1,6 +1,8 @@
 import Path from 'path';
+import arrify from 'arrify';
 import * as cp from './child-process.js';
 import * as fs from './fs.js';
+
 
 export async function build(opts = {}) {
   if (await exists(opts.tag) && !opts.build) {
@@ -49,11 +51,21 @@ export async function run(opts = {}) {
       }
     });
   }
+  if (opts.env) {
+    for (const env of arrify(opts.env)) {
+      args.push('--env', env);
+    }
+  }
+  if (opts.envFile) {
+    for (const envFile of arrify(opts.envFile)) {
+      args.push('--env-file', envFile);
+    }
+  }
   args.push(...(opts.passThrough ?? []));
   args.push(opts.tag);
   if (opts.command && opts.command.length) {
     args.push(...opts.command);
-  } else {
+  } else if (opts.command !== false) {
     args.push('bash');
   }
   return await cp.exec('docker', args);

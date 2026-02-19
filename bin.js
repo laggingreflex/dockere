@@ -19,7 +19,7 @@ export const options = {
     alias: ['d'],
     type: 'string',
     description: `Dockerfile to use.\nEg: ${dockerfileChoices.join()}`,
-    // choices: dockerfileChoices,
+    choices: dockerfileChoices,
     // default: 'ubuntu',
     coerce(value) {
       // console.log(`coerce:`, { value })
@@ -60,6 +60,24 @@ export const options = {
     alias: ['n'],
     type: 'boolean',
     description: `Don't mount current directory. Mounts by default\n${cwd}`
+  },
+  env: {
+    alias: ['e'],
+    type: 'string',
+    description: `Set environment variables\n<key>=<value>`,
+    default: ['OPENAI_API_KEY'],
+  },
+  envFile: {
+    // alias: ['E'],
+    type: 'string',
+    description: `Read in a file of environment variables\nEach line should be in the form <key>=<value>`,
+    // default: '.env',
+  },
+  port: {
+    alias: ['p'],
+    type: 'number',
+    description: `Expose a port in the container`,
+    // default: '.env',
   },
   passThrough: {
     alias: ['-'],

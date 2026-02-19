@@ -7,6 +7,7 @@
   "type": "module",
   "repository": "laggingreflex/dockere",
   "dependencies": {
+    "arrify": "^3.0.0",
     "drivelist": "^9.2.4",
     "enquire-simple": "^2.4.0",
     "fs-extra": "^10.1.0",
